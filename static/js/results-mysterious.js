@@ -42,6 +42,7 @@ function getRandomCity(Cities) {
 var randomCity = getRandomCity(europeanCities);
 
 
+// Function to extract URL parameters
 function parameters() {
     // Function to extract URL parameters
     // return: a dictionary of the users input.
@@ -55,6 +56,7 @@ function parameters() {
     }
 }
 
+// Get URL parameters
 var param = parameters();
 
 // Function to show loading alert
@@ -67,12 +69,13 @@ function hideLoadingAlert() {
     $('#loadingAlert').fadeOut();
 }
 
+// Function to fetch weather data based on city and date
 async function weatherAPI(date) {
     // Function to fetch weather data based on city and date
     // input: cityTp, the city you are traveling to. date, the is the date of your trave;.
     // return: climate information about the city.
     const fixed_date = date.slice(6,11);
-    const url1 = `https://api.openweathermap.org/geo/1.0/direct?q=${randomCity}&limit=1&appid=76dcae341cd27c351c448e898edca058`;
+    const url1 = `http://api.openweathermap.org/geo/1.0/direct?q=${randomCity}&limit=1&appid=76dcae341cd27c351c448e898edca058`;
     const first_response = await fetch(url1);
     const latitude_longitude = await first_response.json();
     const lon = latitude_longitude[0]['lon'];
@@ -86,6 +89,7 @@ async function weatherAPI(date) {
     return result;
 }
 
+// Function to transform city name into cityId
 async function transformCity(city) {
     // Function to transform city name into cityId
     // inpit: city, the city you want to encode.
@@ -108,6 +112,8 @@ async function transformCity(city) {
         console.error(error)
     }
 }
+
+// Function to generate flight card markup
 async function generateCard(result, cityId, cityTo, number) {
     // Function to generate flight card markup
     // input: result, the response of the flight api. cityId, the city you are traveling from. cityTo, the city you are traveling to. number, the number of the flight.
@@ -144,8 +150,10 @@ async function generateCard(result, cityId, cityTo, number) {
         </div>
     </div>`;
 
+    
     html.insertAdjacentHTML('beforeend', markup);
 }
+
 
 // Function to prompt user to login
 function promptLogin() {
@@ -153,18 +161,46 @@ function promptLogin() {
     // You can extend this function to redirect to the login page or show a modal for logging in
 }
 
+// Function to plot flight prices
+function plotPrices(prices) {
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: prices.map((_, index) => `Flight ${index + 1}`),
+            datasets: [{
+                label: 'Flight Prices',
+                data: prices,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
 
 let cachedData = null;
 
+// Function to fetch flights based on search criteria
 async function fetchFlights() {
     // Function to fetch flights based on search criteria
     // return: does not return anything.
     try {
-        document.getElementById('loadingAlert').style.display = 'block'; // Show loading alert
+        showLoadingAlert(); // Show loading alert
         
+        // Transform origin city name into cityId
         const cityId = await transformCity(param['origin']);
+        // Transform destination city name into cityTo
         const cityTo = await transformCity(randomCity);
 
+        // Construct URL for flight search
         const url = `https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip?fromEntityId=${cityId}&toEntityId=${cityTo}&departDate=${param['dept_date']}&returnDate=${param['return_date']}&stops=direct,1stop`;
         const options = {
             method: 'GET',
@@ -174,19 +210,40 @@ async function fetchFlights() {
             }
         };
 
+        // Fetch flight data
         const response = await fetch(url, options);
         const result = await response.json();
         var resultsLength = result['data']['itineraries'].length;
+        
+        let allFlightPrices = []; // Array to store flight prices
 
+        // Process the result
+        for (let i = 0; i < resultsLength; i++) {
+            const priceStr = flightPrice(result, i);
+            const price = parsePrice(priceStr);
+            allFlightPrices.push(price); // Add price to the array
+
+            // Check if the price is within the specified range
+            if ((param['min_price'] === null || param['min_price'] === "" || price >= parsePrice(param['min_price'])) &&
+                (param['max_price'] === null || param['max_price'] === "" || price <= parsePrice(param['max_price']))) {
+
+                generateCard(result, cityId, cityTo, i);
+            }
+        }
+        let counter = 0
         if (resultsLength > 0 && resultsLength < 11) {
             document.getElementById('count').insertAdjacentHTML('beforeend', `<p><strong>Number of Flights Found:</strong> ${resultsLength}</p>`);
             for (let i = 0; i < resultsLength; i++) {
                 generateCard(result, cityId, cityTo, i);
+                counter += 1;
+
             }
         } else if (resultsLength > 10) {
             document.getElementById('count').insertAdjacentHTML('beforeend', '<p><strong>Number of Flights Found:</strong> 10 </p>');
             for (let i = 0; i < 10; i++) {
                 generateCard(result, cityId, cityTo, i);
+                counter += 1;
+
             }
         } else if (resultsLength === 0) {
             document.getElementById('count').insertAdjacentHTML('beforeend', '<p><strong>Number of Flights Found:</strong> 0 </p>');
@@ -197,14 +254,38 @@ async function fetchFlights() {
                 </div>
             </div>`);
         }
+        if (counter > 0) {
+            let flightPrices = allFlightPrices.slice(0, counter);
+            plotPrices(flightPrices); // Plot the flight prices
+        }
+        // Display number of flights found
+        document.getElementById('count').insertAdjacentHTML('beforeend', `<p><strong>Number of Flights Found:</strong> ${flightCount}</p>`);
 
-        document.getElementById('loadingAlert').style.display = 'none'; // Hide loading alert after results are loaded
+        // Display message if no results found
+        if (flightCount === 0) {
+            document.getElementById('main').insertAdjacentHTML('beforeend', `<div class="row">
+                <div class="col-md-12">
+                    <div class="flight-card">
+                        <p> No results found </p>
+                    </div>
+                </div>
+            </div>`);
+        }
+
+        hideLoadingAlert(); // Hide loading alert
     } catch (error) {
         console.error('Error fetching data:', error);
+        hideLoadingAlert(); // Hide loading alert on error
+
     }
 }
 
+// Function to parse price string into number
+function parsePrice(priceStr) {
+    return Number(priceStr.replace(/[^0-9.-]+/g, ""));
+}
 
+// Function to extract flight price from data
 function flightPrice(data,number) {
     // Function to extract flight price from data
     // input: data, which is the API response of the found flights .number, is the number of the flight
@@ -213,6 +294,7 @@ function flightPrice(data,number) {
     return price;
 }
 
+// Function to populate airport list
 function populateAirportList(data) {
     // Function to populate airport list
     // input: data, which is the API response of the found flights
@@ -222,6 +304,7 @@ function populateAirportList(data) {
     return markup;
 }
 
+// Function to get first airport name
 function firstAirport(data) {
     // Function to get first airport name
     // input: data, which is the API response of the found flights
@@ -230,22 +313,25 @@ function firstAirport(data) {
     return airports;
 }
 
+// Function to get departure time
 function departureTime(data, number) {
     // Function to get departure time
     // input: data, which is the API response of the found flights .number, is the number of the flight
-    // return: departure time   
+    // return: departure time       
     const time = data['data']['itineraries'][number]['legs'][0]['departure'].slice(11,16);
     return time;
 }
 
+// Function to get arrival time
 function arrivalTime(data, number) {
     // Function to get arrival time
     // input: data, which is the API response of the found flights .number, is the number of the flight
-    // return: arrival time     
+    // return: arrival time      
     const time = data['data']['itineraries'][number]['legs'][0]['arrival'].slice(11,16);
     return time;
 }
 
+// Function to generate Skyscanner booking link
 function skyscannerLink(cityId, cityTo, dept_date, arrival_date) {
     // Function to generate Skyscanner booking link
     // input: cityId, city traveling from. cityTo, city traveling to. dept_date, the departure date. arrival_date, the return date.
@@ -256,4 +342,5 @@ function skyscannerLink(cityId, cityTo, dept_date, arrival_date) {
     return url;
 }
 
+// Call the fetchFlights function to start fetching flight data
 fetchFlights();
