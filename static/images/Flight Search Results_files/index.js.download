@@ -1,0 +1,58 @@
+let cachedData = null; // Variable to store cached API response data
+
+async function fetchFlights() {
+    if (cachedData) {
+        // If data is already cached, use it directly
+        populateFlightList(cachedData);
+        populateAirportList(cachedData);
+    } else {
+        const url = 'https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip?fromEntityId=PARI&toEntityId=ROME&departDate=2024-06-22&returnDate=2024-06-25&market=US&currency=USD&stops=direct';
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '76e3d7e612msha9b0c87d96f7361p175e04jsn7f8908586ac3',
+                'x-rapidapi-host': 'sky-scanner3.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            cachedData = result; // Cache the API response data
+
+            populateFlightList(result);
+            populateAirportList(result);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+}
+
+function populateFlightList(data) {
+    const flightList = document.getElementById('firstPrice');
+    const price = data['data']['itineraries'][0].price.formatted;
+
+    const markup = `${price}`;
+
+    flightList.innerText = markup;
+}
+
+function populateAirportList(data) {
+    const airportList = document.getElementById('airportList');
+    const airports = data['data']['filterStats']['airports'];
+
+    const markup = `${airports[0].city} to ${airports[1].city}`
+    airportList.innerText = markup
+}
+
+function firstAirport(data) {
+    const airportList = document.getElementById('firstAirport');
+    const airports = data['data']['filterStats']['airports'];
+
+    const markup = `<strong>Price: ${airports[0].city}</strong>`
+    airportList.innerHTML = markup
+}
+
+// Call the async function
+fetchFlights();

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://127.0.0.1:5500/frontend/templates/trying.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search Results</title>
+    <link href="./Flight Search Results_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url(../images/bg.jpg);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        .navbar {
+            margin-bottom: 20px; /* Add margin below navbar to separate it from content */
+        }
+        .content {
+            margin-top: 80px; /* Add margin to push content down */
+            width: 100%;
+            max-width: 800px;
+        }
+        .flight-count {
+            margin-bottom: 20px;
+        }
+        .flight-card {
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            color: grey; /* Ensure text is readable on light background */
+        }
+        .flight-info {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .flight-info p {
+            flex: 1 1 50%; /* Each paragraph takes up 50% of the container's width */
+        }
+        nav > svg {
+            height: 20px;
+            width: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-airplane ms-3" viewBox="0 0 16 16">
+            <path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599"></path>
+        </svg>
+        <a class="navbar-brand ms-3" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;index&#39;)%20%7D%7D">TravelEase</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;index&#39;)%20%7D%7D">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;search_normal_flights&#39;)%20%7D%7D">Search your flight</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;about_us&#39;)%20%7D%7D">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;login&#39;)%20%7D%7D">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:5500/frontend/templates/%7B%7B%20url_for(&#39;sign_up&#39;)%20%7D%7D">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="header">
+            <h1>Flight Search Results</h1>
+        </div>
+        <div class="flight-count">
+            <p><strong>Number of Flights Found:</strong> 5</p>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="flight-card">
+                    <h2 class="text-dark" id="airportList">Paris to Rome</h2>
+                    <div class="flight-info">
+                        <p id="firstAirport"><strong>Departure:</strong></p>
+                        <p><strong>Departure Time:</strong> 10:00 AM</p>
+                        <p><strong>Arrival Time:</strong> 3:00 PM</p>
+                        <p id="firstPrice">$185</p>
+                        <p><strong>Weather at Arrival:</strong> Partly Cloudy</p>
+                        <p><strong>Temperature at Arrival:</strong> 75°F</p>
+                        <p><strong>Wind at Arrival:</strong> 7 mph</p>
+                        <p><strong>Humidity at Arrival:</strong> 50%</p>
+                    </div>
+                    <button class="btn btn-secondary">Book Now</button>
+                </div>
+            </div>
+    </div>
+    <!-- Include the external JavaScript file -->
+    <script src="./Flight Search Results_files/index.js.download"></script>
+    <script src="./Flight Search Results_files/bootstrap.bundle.min.js.download" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</div></body></html>

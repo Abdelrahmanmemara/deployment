@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        #color {
+            color:white;
+        }
+        body {
+            background-image: url(../images/bg.jpg);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 0;
+        }
+
+        .body-text {
+            color:white;
+        }
+
+        .first {
+            flex-grow: 1;
+        }
+
+        div[class="px-4 py-5 my-5 text-center"] > h1 {
+            color:white;
+            font-weight:bold;
+            font-size:6rem;
+            padding-right: 15px;
+        }
+
+        div[class="container rounded col-lg-6 mx-auto"]  {
+            color: black;
+            height: 30%;
+            margin:50px;
+        }
+
+        .text {
+            font-size:2rem;
+        }
+
+        .center-svg {
+            text-align: center;
+        }
+
+        nav > svg {
+            height: 20px;
+            width: 20px;
+        }
+
+        div[class="mb-3"] {
+            color:white;
+        }
+        button[class="btn btn-outline-secondary"] {
+            color:white;
+        }
+
+        label {
+            font-size: 30px;
+            color:darkblue;
+        }
+
+        nav {
+            color:aliceblue;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-airplane ms-3" viewBox="0 0 16 16">
+                <path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599"/>
+            </svg>
+            <a class="navbar-brand ms-3" href="{{ url_for('index1') }}">TravelEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index1') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('search_normal_flights1') }}">Search your flight</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about_us1') }}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                    </li>
+
+                </ul>
+            </div>
+    </nav>
+    <div class="px-4 py-5 my-5 text-center">
+        <h2 class="display-4 fw-bold">About Us</h2>
+
+    </div>
+    <div class="container first">
+
+    <div class="container" style="background-color: white; border-radius: 5%;">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+            <img src="../images/travel.jpg" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3 ms-3">Travel with TravelEase</h1>
+            <p class="fs-5 mt-3 text-secondary ms-3">Welcome to our unique travel platform, where you can embrace the thrill of the unknown with our mysterious flight planner or effortlessly book your dream destination. Let your wanderlust take flight as you discover new adventures with just a few clicks!</p>
+            <div class="row d-grid gap-2 d-md-flex justify-content-md-start">
+                <div class="col-lg-6">
+                    <a class="btn btn-secondary btn-lg px-4 me-md-2 ms-3" href="{{ url_for('search_mysterious_flights') }}">Mystery</a>
+
+                </div>
+                <div class="col-lg-1">
+                    <a class="btn btn-dark btn-lg px-4 ms-3" href="{{ url_for('search_normal_flights') }}">Normal</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-2 pt-3">
+        <div class="bg-white text-secondary px-4 py-5 text-center" style="border-radius:2%">
+            <div class="py-5">
+              <h1 class="display-5 fw-bold text-black">What is the project for?</h1>
+              <div class="col-lg-6 mx-auto">
+                <p class="fs-5 mt-3 text-secondary">This project is designed to take the user experience to a whole another level of entertainment. We try to add the random factor to your travel and make it more fun.</p>
+              </div>
+            </div>
+          </div>
+    </div>
+    </div>
+
+    <div class="container mt-5" style="background-color: white; border-radius: 3%;">
+        <h2 class="row pt-3" style="color: black; padding-left: 10px;">
+            Team Members
+        </h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="feature col">
+              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"></use></svg>
+              </div>
+              <h3 class="fs-2 text-body-emphasis">Abdelrahman</h3>
+              <a href="mailto:abdelrahmanmemara11@gmail.com" class="icon-link text-secondary">
+                abdelrahmanmemara11@gmail.com
+                <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+              </a>
+            </div>
+            <div class="feature col">
+              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"></use></svg>
+              </div>
+              <h3 class="fs-2 text-body-emphasis">Amina</h3>
+              <a href="mailto:a.ahmad2@student.vu.nl" class="icon-link  text-secondary">
+                a.ahmad2@student.vu.nl
+                <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+              </a>
+            </div>
+            <div class="feature col">
+              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+              </div>
+              <h3 class="fs-2 text-body-emphasis">Tuana</h3>
+              <a href="mailto:tuana.durmayuksel@gmail.com" class="icon-link  text-secondary">
+                tuana.durmayuksel@gmail.com
+                <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+              </a>
+            </div>
+          </div>
+    </div>
+
+    <footer class="text-center py-3">
+        <p>&copy; 2024 TravelEase. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
