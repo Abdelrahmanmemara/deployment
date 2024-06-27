@@ -72,7 +72,7 @@ async function weatherAPI(date) {
     // input: cityTp, the city you are traveling to. date, the is the date of your trave;.
     // return: climate information about the city.
     const fixed_date = date.slice(6,11);
-    const url1 = `http://api.openweathermap.org/geo/1.0/direct?q=${randomCity}&limit=1&appid=76dcae341cd27c351c448e898edca058`;
+    const url1 = `https://api.openweathermap.org/geo/1.0/direct?q=${randomCity}&limit=1&appid=76dcae341cd27c351c448e898edca058`;
     const first_response = await fetch(url1);
     const latitude_longitude = await first_response.json();
     const lon = latitude_longitude[0]['lon'];
