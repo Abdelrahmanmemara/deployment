@@ -51,7 +51,7 @@ def serve_images(filename):
     """
     Serve images from the images folder.
     """
-    return send_from_directory('../frontend/images', filename)
+    return send_from_directory('./frontend/images', filename)
 
 @app.route('/')
 def index():
