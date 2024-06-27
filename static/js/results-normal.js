@@ -116,6 +116,30 @@ function promptLogin() {
     // You can extend this function to redirect to the login page or show a modal for logging in
 }
 
+// Function to plot flight prices
+function plotPrices(prices) {
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: prices.map((_, index) => `Flight ${index + 1}`),
+            datasets: [{
+                label: 'Flight Prices',
+                data: prices,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
 
 // Function to fetch flights based on search criteria
 async function fetchFlights() {
@@ -144,27 +168,35 @@ async function fetchFlights() {
         const result = await response.json();
         var resultsLength = result['data']['itineraries'].length;
         
+        let allFlightPrices = []; // Array to store flight prices
+
         // Process the result
         for (let i = 0; i < resultsLength; i++) {
             const priceStr = flightPrice(result, i);
             const price = parsePrice(priceStr);
+            allFlightPrices.push(price); // Add price to the array
 
             // Check if the price is within the specified range
             if ((param['min_price'] === null || param['min_price'] === "" || price >= parsePrice(param['min_price'])) &&
                 (param['max_price'] === null || param['max_price'] === "" || price <= parsePrice(param['max_price']))) {
+
                 generateCard(result, cityId, cityTo, i);
             }
         }
-
+        let counter = 0
         if (resultsLength > 0 && resultsLength < 11) {
             document.getElementById('count').insertAdjacentHTML('beforeend', `<p><strong>Number of Flights Found:</strong> ${resultsLength}</p>`);
             for (let i = 0; i < resultsLength; i++) {
                 generateCard(result, cityId, cityTo, i);
+                counter += 1;
+
             }
         } else if (resultsLength > 10) {
             document.getElementById('count').insertAdjacentHTML('beforeend', '<p><strong>Number of Flights Found:</strong> 10 </p>');
             for (let i = 0; i < 10; i++) {
                 generateCard(result, cityId, cityTo, i);
+                counter += 1;
+
             }
         } else if (resultsLength === 0) {
             document.getElementById('count').insertAdjacentHTML('beforeend', '<p><strong>Number of Flights Found:</strong> 0 </p>');
@@ -174,6 +206,10 @@ async function fetchFlights() {
                 <p> No results found </p>
                 </div>
             </div>`);
+        }
+        if (counter > 0) {
+            let flightPrices = allFlightPrices.slice(0, counter);
+            plotPrices(flightPrices); // Plot the flight prices
         }
         // Display number of flights found
         document.getElementById('count').insertAdjacentHTML('beforeend', `<p><strong>Number of Flights Found:</strong> ${flightCount}</p>`);
