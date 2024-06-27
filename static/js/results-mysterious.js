@@ -125,6 +125,7 @@ async function generateCard(result, cityId, cityTo, number) {
     const arrival_time = arrivalTime(result, number);
     const airport = firstAirport(result);
     const weather = await weatherAPI(param['dept_date']);
+    console.log(weather);
     const temp = weather['temperature']['min'];
     const wind = weather['wind']['max']['speed'];
     const humidity = weather['humidity']['afternoon'];
